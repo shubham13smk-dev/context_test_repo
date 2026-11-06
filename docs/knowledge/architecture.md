@@ -14,11 +14,7 @@ Put "_Updated YYYY-MM-DD by <name> — related: <paths>_" under each section you
 
 - **Decision:** maps change only the background. They have no effect on gameplay (no obstacles, no collisions, no change to enemies). Why: "Change map each level" swaps maps every level, so balance must be identical on every map. Difficulty is a separate setting.
 
-_Updated 2026-11-06 by shubham shetmandrekar — related: index.html_
-
-  **Note from knowledge-bootstrap (2026-11-06):** no maps, no settings screen and no difficulty
-  setting exist in `index.html` on `main`. The entry above is kept as written; the discrepancy is
-  question 1 in [open-questions.md](open-questions.md).
+_Updated 2026-11-07 by shubham shetmandrekar — related: index.html_
 
 ## Shape of the whole thing
 
@@ -59,9 +55,11 @@ _Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
 
 ## Persistence
 
-- The only persisted value is the high score, in local storage. Reads and writes are both wrapped
-  in `try`/`catch` so the game still runs where storage is unavailable or blocked; in that case the
-  high score just resets each session. There is no other saved state.
+- Two things are saved in local storage: the high score and the player's settings (map, change map
+  each level, difficulty, auto-fire). Every read and write is wrapped in `try`/`catch`, so the game
+  still runs where storage is unavailable or blocked; both then reset each session.
+- Saved settings are checked against the list of valid options when loaded. Any unknown or invalid
+  value falls back to the default, so a renamed or removed option never breaks the game.
 
-_Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
+_Updated 2026-11-07 by shubham shetmandrekar — related: index.html_
 

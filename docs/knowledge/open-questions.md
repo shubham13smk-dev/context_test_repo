@@ -13,23 +13,14 @@ Put "_Updated YYYY-MM-DD by <name> — related: <paths>_" under each section you
 Grouped so they can be answered in one sitting. Once a question is answered, record the answer in
 the right topic, remove the matching ⚠ flag there, and delete the entry here.
 
-## 1. The knowledge base describes a settings screen, maps and a difficulty setting that the game does not have
+## 1. Should Easy start at the 5-life cap? — for the PM / BA
 
-**Answer first — it affects several other topics.** `architecture.md` and `conventions.md` state
-that maps change only the background, that difficulty is a separate setting, and that picking a map
-in Settings has to redraw the screen. The game on the main branch has **no settings screen, no
-maps and no difficulty setting** at all.
+On Easy a run starts with 5 lives, which is also the maximum. So an extra-life pickup gives nothing
+until the player has been hit at least once. Is that intended? If not, should Easy start lower, or
+should the cap be higher on Easy?
 
-What the history shows: a commit "settings menu and new canvas added" adds roughly 200 lines to the
-game. It sits on the `knowledge/init` branch, committed after that branch's pull request had already
-been merged, so the code was pushed but never reached the main branch. The notes about it were merged
-separately.
-
-Is the settings / maps / difficulty feature (a) intended, so the code needs merging into main, or
-(b) dropped, in which case the notes should be corrected? If restored, is difficulty a player-facing choice, and what does it change?
-
-Raised by: knowledge-bootstrap (2026-11-06)
-_related: index.html, docs/knowledge/architecture.md, docs/knowledge/conventions.md, docs/knowledge/gotchas.md_
+Raised by: shubham shetmandrekar (2026-11-07)
+_related: index.html, docs/knowledge/business-rules.md_
 
 ## 2. Who is this for, and what is it for?
 
@@ -44,7 +35,7 @@ _related: docs/knowledge/overview.md_
 
 Every value below is what the game does today. Please confirm each, or give the intended value.
 
-- Start with **3 lives**, capped at **5**.
+- Start with **5 / 3 / 2 lives** on Easy / Normal / Hard, capped at **5** (see question 1).
 - **2 seconds** of invulnerability at the start of a run and after each hit.
 - Being hit **cancels the spread shot**, even with time left on it.
 - Enemies are worth **10 / 25 / 50** points.

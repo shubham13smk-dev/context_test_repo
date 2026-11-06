@@ -16,16 +16,18 @@ reason is ⚠ **Needs PM/BA confirmation** and the value is listed in open-quest
 
 ## Lives and damage
 
-- A run starts with **3 lives**.
+- A run starts with **5 lives on Easy, 3 on Normal, 2 on Hard**. Changing difficulty mid-run does
+  not change the current lives; it applies from the next run.
 - The player loses **one life** per hit, whether hit by an enemy's shot or by colliding with an
   enemy. Colliding also destroys that enemy.
 - The run ends as soon as lives reach **zero**.
 - After being hit, and for the first **2 seconds** of a run, the player cannot be hit again. The
   ship blinks for the whole of that time so the state is visible.
 - Being hit also **cancels the three-way shot** immediately, even if time was left on it.
-- Lives are capped at **5**. Collecting an extra life at 5 lives gives nothing back.
+- Lives are capped at **5**. Collecting an extra life at 5 lives gives nothing back. On Easy a run
+  starts at the cap. ⚠ Needs PM/BA confirmation — see question 1 in open-questions.md.
 
-_Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
+_Updated 2026-11-07 by shubham shetmandrekar — related: index.html_
 
 ## Scoring
 
@@ -49,8 +51,11 @@ _Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
   0.3 seconds** on average.
 - The shooting enemy fires faster as the level rises, down to a **floor of one shot every
   0.8 seconds**. It only fires once it is on screen.
+- On top of the level ramp, the chosen difficulty scales enemy pressure: enemy speed is
+  **×0.8 on Easy, ×1 on Normal, ×1.25 on Hard**, and the time between spawns is **×1.3 / ×1 / ×0.75**.
+  A change of difficulty mid-run takes effect immediately for these.
 
-_Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
+_Updated 2026-11-07 by shubham shetmandrekar — related: index.html_
 
 ## Power-ups
 
@@ -70,5 +75,7 @@ _Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
 - With the three-way shot active, one shot fires **three bullets** in a narrow fan instead of one.
 - On touch and mouse, holding down to move also fires. The player **cannot move without shooting**
   on touch. ⚠ Needs PM/BA confirmation — intended, or a side effect?
+- On keyboard, firing is manual by default. With **Auto-fire** on in Settings, the ship fires
+  continuously at the normal rate without holding space.
 
-_Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
+_Updated 2026-11-07 by shubham shetmandrekar — related: index.html_

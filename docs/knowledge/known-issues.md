@@ -50,11 +50,3 @@ _Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
 it renders with stray characters in some tools. It tells a newcomer nothing.
 
 _Drafted 2026-11-06 by knowledge-bootstrap — related: README.md_
-
-## The settings / maps feature is missing from the main branch
-
-The knowledge base documents a settings screen and map backgrounds, but that code is not on `main`.
-It was committed to the `knowledge/init` branch after that branch's pull request had already been
-merged, so it was pushed but never merged. This is the subject of question 1 in open-questions.md.
-
-_Drafted 2026-11-06 by knowledge-bootstrap — related: index.html, docs/knowledge/architecture.md_

@@ -40,13 +40,9 @@ _Drafted 2026-11-06 by knowledge-bootstrap — related: (none)_
 
 ## Current status
 
-Early prototype. The playable game was committed on 2026-11-05 and has had one substantive change
-since. Work so far has come from a single contributor. A team knowledge base was added on
-2026-11-05 and extended on 2026-11-06. There are no automated tests and no release or hosting
-setup in the repository.
+Early prototype. The playable game was committed on 2026-11-05 and has since gained a settings screen
+with selectable maps, a difficulty setting and keyboard auto-fire. Work so far has come from a
+single contributor. A team knowledge base was added on 2026-11-05 and extended on 2026-11-06.
+There are no automated tests and no release or hosting setup in the repository.
 
-Note for reviewers: the knowledge base currently describes a settings screen, selectable map
-backgrounds and a difficulty setting. None of those exist in the game on the main branch — see the
-first entry in open-questions.md.
-
-_Drafted 2026-11-06 by knowledge-bootstrap — related: index.html, docs/knowledge/architecture.md_
+_Updated 2026-11-07 by shubham shetmandrekar — related: index.html, docs/knowledge/architecture.md_
