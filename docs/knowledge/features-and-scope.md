@@ -14,7 +14,8 @@ Put "_Updated YYYY-MM-DD by <name> — related: <paths>_" under each section you
 
 - A single endless run: enemies keep coming until the player runs out of lives.
 - The ship moves left and right only, along the bottom of the screen. It cannot move up or down.
-- Shooting is manual on keyboard and automatic while a finger or pointer is held down.
+- Shooting is manual on keyboard (unless auto-fire is switched on in Settings) and automatic while a
+  finger or pointer is held down.
 - The run can be paused and resumed at any time while playing.
 - A run can be started from the opening screen or restarted from the game-over screen.
 
@@ -45,10 +46,22 @@ _Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
 
 - Keyboard: arrow keys or A/D to move, space to shoot, P to pause, Enter or space to start.
 - Touch and mouse: drag to move, hold to fire.
-- A moving starfield plays behind the opening screen and during the game.
+- A moving background plays behind the opening screen and during the game. There are four to choose
+  from (Deep Space, Nebula, Asteroid Field, Cyber Grid). They are scenery only and never affect play.
 - Explosions, engine flame and a blinking ship after being hit give visual feedback.
 
 _Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
+
+## In the product today — settings
+
+- A Settings screen, reachable from the opening, paused and game-over screens. Choices are
+  remembered in the player's browser.
+- **Map:** pick one of the four backgrounds, or have the map change every level.
+- **Difficulty:** Easy, Normal or Hard. It sets the starting lives and how fast and how often
+  enemies come. See business-rules.md.
+- **Auto-fire:** keeps the ship shooting on keyboard without holding space. Off by default.
+
+_Updated 2026-11-07 by shubham shetmandrekar — related: index.html_
 
 ## Not in the product
 
@@ -58,8 +71,6 @@ Things a player or reviewer might reasonably expect, which the game does not hav
   lost if they clear site data or switch device or browser. ⚠ Deliberate, or not yet built?
 - **Saving a run in progress** — closing the page loses the run. ⚠ Deliberate, or not yet built?
 - **Sound or music** — the game is completely silent. ⚠ Deliberate, or not yet built?
-- **A settings screen, selectable maps or a difficulty setting** — described in the knowledge base
-  but not present in the game. ⚠ See open-questions.md.
 - **An end, a win condition or boss fights** — runs only end by losing.
   ⚠ Deliberate, or not yet built?
 - **Levels as designed waves** — "level" is purely a difficulty step driven by elapsed time; there
