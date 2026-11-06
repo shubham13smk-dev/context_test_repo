@@ -1,0 +1,74 @@
+---
+audience: business
+owner: PM
+---
+# Features and scope
+
+<!--
+What the product does today, what is deliberately out of scope (and why), and what is planned next. Link tickets instead of copying them.
+Keep it current: replace outdated statements instead of adding new ones.
+Put "_Updated YYYY-MM-DD by <name> — related: <paths>_" under each section you change.
+-->
+
+## In the product today — playing
+
+- A single endless run: enemies keep coming until the player runs out of lives.
+- The ship moves left and right only, along the bottom of the screen. It cannot move up or down.
+- Shooting is manual on keyboard and automatic while a finger or pointer is held down.
+- The run can be paused and resumed at any time while playing.
+- A run can be started from the opening screen or restarted from the game-over screen.
+
+_Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
+
+## In the product today — enemies and difficulty
+
+- Three kinds of enemy, introduced gradually as the run goes on: a fast weak one, a tougher one
+  that weaves side to side, and a slow tough one that shoots back at the player.
+- The shooting enemy aims at wherever the player currently is.
+- Tougher enemies show a small health bar above them, so the player can see what is nearly dead.
+- Difficulty rises automatically with the level: enemies arrive faster, move faster, and the
+  shooting enemy fires more often.
+
+_Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
+
+## In the product today — scoring and power-ups
+
+- Points are earned per enemy destroyed, worth more for tougher enemies.
+- Points are lost when an enemy escapes off the bottom of the screen.
+- Two power-ups can drop from destroyed enemies: a temporary three-way shot, and an extra life.
+- The score, the current level and the remaining lives are shown on screen during play.
+- The best score reached is kept on the player's own device and shown when a run ends.
+
+_Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
+
+## In the product today — controls and presentation
+
+- Keyboard: arrow keys or A/D to move, space to shoot, P to pause, Enter or space to start.
+- Touch and mouse: drag to move, hold to fire.
+- A moving starfield plays behind the opening screen and during the game.
+- Explosions, engine flame and a blinking ship after being hit give visual feedback.
+
+_Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
+
+## Not in the product
+
+Things a player or reviewer might reasonably expect, which the game does not have today:
+
+- **Accounts or online leaderboards** — the best score never leaves the player's browser, and is
+  lost if they clear site data or switch device or browser. ⚠ Deliberate, or not yet built?
+- **Saving a run in progress** — closing the page loses the run. ⚠ Deliberate, or not yet built?
+- **Sound or music** — the game is completely silent. ⚠ Deliberate, or not yet built?
+- **A settings screen, selectable maps or a difficulty setting** — described in the knowledge base
+  but not present in the game. ⚠ See open-questions.md.
+- **An end, a win condition or boss fights** — runs only end by losing.
+  ⚠ Deliberate, or not yet built?
+- **Levels as designed waves** — "level" is purely a difficulty step driven by elapsed time; there
+  are no hand-built waves or stages. ⚠ Deliberate, or not yet built?
+
+_Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
+
+## Planned next
+
+_No entries yet._ ⚠ Nothing in the repository records a roadmap. See open-questions.md.
+
+_Drafted 2026-11-06 by knowledge-bootstrap — related: (none)_

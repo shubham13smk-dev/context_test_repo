@@ -1,3 +1,7 @@
+---
+audience: technical
+owner: Developers
+---
 # Gotchas
 
 <!--
@@ -17,4 +21,22 @@ _Updated 2026-11-06 by shubham shetmandrekar — related: index.html_
 - The Playwright browser tool blocks `file://` URLs. Serve the folder over a local web server (e.g. `python -m http.server`) and open it at `http://localhost:<port>/index.html`.
 
 _Updated 2026-11-06 by shubham shetmandrekar — related: index.html_
+
+## Timing
+
+- `dt` is clamped at 0.033s (≈30fps). Below that frame rate the game runs in slow motion instead of
+  dropping frames — so a performance problem shows up as sluggish play, not as missed collisions.
+  Don't "fix" an apparent speed bug without checking the frame rate first.
+
+_Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
+
+## Input
+
+- `keydown` calls `preventDefault()` for space and the arrow keys, so the page never scrolls during
+  play. Any new key that the browser also acts on needs adding to that list.
+- The pointer handlers are split deliberately: `pointerdown` and `pointermove` are on the canvas,
+  but `pointerup` is on the window. If `pointerup` moves onto the canvas, releasing outside it
+  leaves the ship stuck moving and auto-firing.
+
+_Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
 
