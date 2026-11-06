@@ -32,6 +32,26 @@
     background: #2bd4ff; color: #05060f; border: none; border-radius: 6px; cursor: pointer;
   }
   button:hover { background: #7cf3ff; }
+  button.secondary { background: transparent; color: #7cf3ff; border: 2px solid #2bd4ff; padding: 10px 30px; font-size: 16px; }
+  button.secondary:hover { background: #2bd4ff22; }
+  #settings {
+    position: absolute; inset: 0; padding: 28px 24px;
+    display: flex; flex-direction: column; align-items: stretch; justify-content: center; gap: 18px;
+    background: rgba(5, 6, 15, 0.9); border-radius: 8px;
+  }
+  #settings.hidden { display: none; }
+  #settings h2 { text-align: center; font-size: 30px; letter-spacing: 3px; color: #7cf3ff; text-shadow: 0 0 14px #2bd4ff; }
+  .setting-label { font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px; color: #8a93c0; margin-bottom: 6px; }
+  .seg { display: flex; flex-wrap: wrap; gap: 6px; }
+  .seg button {
+    flex: 1 1 0; margin: 0; padding: 8px 6px; font-size: 14px; font-weight: 600;
+    background: #141936; color: #aab3e0; border: 1px solid #2a3170; border-radius: 6px; white-space: nowrap;
+  }
+  .seg button:hover { background: #1d2450; }
+  .seg button.active { background: #2bd4ff; color: #05060f; border-color: #2bd4ff; }
+  .seg.maps button { flex-basis: 45%; }
+  .hint { font-size: 12px; color: #6b739c; margin-top: 4px; }
+  #closeSettings { align-self: center; }
 </style>
 </head>
 <body>
@@ -45,6 +65,28 @@
       Pause: <b>P</b>
     </p>
     <button id="startBtn">Start Game</button>
+    <button id="settingsBtn" class="secondary">Settings</button>
+  </div>
+  <div id="settings" class="hidden">
+    <h2>SETTINGS</h2>
+    <div>
+      <div class="setting-label">Map</div>
+      <div class="seg maps" data-key="map"></div>
+    </div>
+    <div>
+      <div class="setting-label">Change map each level</div>
+      <div class="seg" data-key="cycleMaps"></div>
+    </div>
+    <div>
+      <div class="setting-label">Difficulty</div>
+      <div class="seg" data-key="difficulty"></div>
+      <div class="hint">Starting lives apply from the next game.</div>
+    </div>
+    <div>
+      <div class="setting-label">Auto-fire (keyboard)</div>
+      <div class="seg" data-key="autoFire"></div>
+    </div>
+    <button id="closeSettings">Back</button>
   </div>
 </div>
 
@@ -60,9 +102,80 @@ const startBtn = document.getElementById('startBtn');
 let highScore = 0;
 try { highScore = +localStorage.getItem('starBlasterHigh') || 0; } catch (e) {}
 
+// ---------- Settings ----------
+const MAPS = {
+  space:     'Deep Space',
+  nebula:    'Nebula',
+  asteroids: 'Asteroid Field',
+  grid:      'Cyber Grid',
+};
+const MAP_KEYS = Object.keys(MAPS);
+const DIFFICULTY = {
+  easy:   { label: 'Easy',   speed: 0.8,  spawn: 1.3,  lives: 5 },
+  normal: { label: 'Normal', speed: 1,    spawn: 1,    lives: 3 },
+  hard:   { label: 'Hard',   speed: 1.25, spawn: 0.75, lives: 2 },
+};
+const SETTING_OPTIONS = {
+  map: MAPS,
+  cycleMaps: { false: 'Off', true: 'On' },
+  difficulty: Object.fromEntries(Object.entries(DIFFICULTY).map(([k, v]) => [k, v.label])),
+  autoFire: { false: 'Off', true: 'On' },
+};
+const settings = { map: 'space', cycleMaps: 'false', difficulty: 'normal', autoFire: 'false' };
+try {
+  const saved = JSON.parse(localStorage.getItem('starBlasterSettings') || '{}');
+  for (const k in settings) if (saved[k] in SETTING_OPTIONS[k]) settings[k] = saved[k];
+} catch (e) {}
+
+const settingsEl = document.getElementById('settings');
+const settingsBtn = document.getElementById('settingsBtn');
+let settingsOpen = false;
+
+function renderSettings() {
+  for (const seg of settingsEl.querySelectorAll('.seg')) {
+    const key = seg.dataset.key;
+    seg.innerHTML = '';
+    for (const [value, label] of Object.entries(SETTING_OPTIONS[key])) {
+      const b = document.createElement('button');
+      b.textContent = label;
+      if (settings[key] === value) b.classList.add('active');
+      b.addEventListener('click', () => {
+        settings[key] = value;
+        try { localStorage.setItem('starBlasterSettings', JSON.stringify(settings)); } catch (e) {}
+        renderSettings();
+        if (state !== 'menu') draw(); // menu redraws itself; refresh the frozen frame otherwise
+      });
+      seg.appendChild(b);
+    }
+  }
+}
+function openSettings() {
+  settingsOpen = true;
+  renderSettings();
+  overlay.classList.add('hidden');
+  settingsEl.classList.remove('hidden');
+}
+function closeSettings() {
+  settingsOpen = false;
+  settingsEl.classList.add('hidden');
+  overlay.classList.remove('hidden');
+}
+settingsBtn.addEventListener('click', openSettings);
+document.getElementById('closeSettings').addEventListener('click', closeSettings);
+
+const diff = () => DIFFICULTY[settings.difficulty];
+function currentMap() {
+  if (settings.cycleMaps === 'true' && state !== 'menu' && level) return MAP_KEYS[(level - 1) % MAP_KEYS.length];
+  return settings.map;
+}
+
 // ---------- Input ----------
 const keys = {};
 addEventListener('keydown', e => {
+  if (settingsOpen) {
+    if (e.code === 'Escape') closeSettings();
+    return;
+  }
   keys[e.code] = true;
   if (['Space', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.code)) e.preventDefault();
   if (e.code === 'KeyP' && state === 'playing') togglePause();
@@ -89,10 +202,88 @@ stars = Array.from({ length: 80 }, () => ({
   s: Math.random() * 2 + 0.5, v: Math.random() * 60 + 20
 }));
 
+// ---------- Backgrounds ----------
+let bgTime = 0;
+const nebulaClouds = Array.from({ length: 7 }, () => ({
+  x: Math.random() * W, y: Math.random() * H,
+  r: 120 + Math.random() * 160, v: 8 + Math.random() * 12,
+  hue: [275, 310, 200, 330][Math.floor(Math.random() * 4)],
+}));
+function makeAsteroid(y) {
+  const r = 10 + Math.random() * 34, n = 7 + Math.floor(Math.random() * 4);
+  return {
+    x: Math.random() * W, y: y ?? -r * 2, r,
+    v: 15 + Math.random() * 35, rot: Math.random() * 6, spin: (Math.random() - 0.5) * 0.8,
+    pts: Array.from({ length: n }, (_, i) => [i / n * Math.PI * 2, r * (0.7 + Math.random() * 0.3)]),
+  };
+}
+let asteroids = Array.from({ length: 12 }, () => makeAsteroid(Math.random() * H));
+
+function updateBackground(dt) {
+  bgTime += dt;
+  for (const s of stars) { s.y += s.v * dt; if (s.y > H) { s.y = 0; s.x = Math.random() * W; } }
+  for (const c of nebulaClouds) {
+    c.y += c.v * dt;
+    if (c.y - c.r > H) { c.y = -c.r; c.x = Math.random() * W; }
+  }
+  for (const a of asteroids) { a.y += a.v * dt; a.rot += a.spin * dt; }
+  asteroids = asteroids.map(a => a.y - a.r > H ? makeAsteroid() : a);
+}
+
+function drawStars(tint, alphaScale = 1) {
+  for (const s of stars) {
+    ctx.fillStyle = `rgba(${tint},${(s.s / 2.5) * alphaScale})`;
+    ctx.fillRect(s.x, s.y, s.s, s.s);
+  }
+}
+
+function drawBackground() {
+  const map = currentMap();
+  if (map === 'nebula') {
+    ctx.fillStyle = '#100820'; ctx.fillRect(0, 0, W, H);
+    for (const c of nebulaClouds) {
+      const g = ctx.createRadialGradient(c.x, c.y, 0, c.x, c.y, c.r);
+      g.addColorStop(0, `hsla(${c.hue},80%,55%,0.22)`);
+      g.addColorStop(1, `hsla(${c.hue},80%,55%,0)`);
+      ctx.fillStyle = g;
+      ctx.fillRect(c.x - c.r, c.y - c.r, c.r * 2, c.r * 2);
+    }
+    drawStars('255,220,255');
+  } else if (map === 'asteroids') {
+    ctx.fillStyle = '#0c0a10'; ctx.fillRect(0, 0, W, H);
+    drawStars('220,210,200', 0.6);
+    // dim and desaturated so they read as scenery, not enemies
+    ctx.fillStyle = '#2a2530'; ctx.strokeStyle = '#4a4252'; ctx.lineWidth = 2;
+    for (const a of asteroids) {
+      ctx.save();
+      ctx.translate(a.x, a.y); ctx.rotate(a.rot);
+      ctx.beginPath();
+      for (const [ang, d] of a.pts) ctx.lineTo(Math.cos(ang) * d, Math.sin(ang) * d);
+      ctx.closePath(); ctx.fill(); ctx.stroke();
+      ctx.restore();
+    }
+  } else if (map === 'grid') {
+    const g = ctx.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, '#05000f'); g.addColorStop(1, '#2a0838');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    const step = 40, off = (bgTime * 80) % step;
+    ctx.lineWidth = 1;
+    for (let y = off - step; y < H; y += step) {
+      ctx.strokeStyle = `rgba(255,60,200,${0.08 + 0.25 * (y / H)})`;
+      ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+    }
+    ctx.strokeStyle = 'rgba(60,220,255,0.14)';
+    for (let x = 0; x <= W; x += step) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+  } else {
+    ctx.fillStyle = '#0a0d1f'; ctx.fillRect(0, 0, W, H);
+    drawStars('200,210,255');
+  }
+}
+
 function startGame() {
   player = { x: W / 2, y: H - 70, w: 34, h: 38, speed: 320, spread: 0 };
   bullets = []; enemies = []; enemyBullets = []; particles = []; powerups = [];
-  score = 0; lives = 3; level = 1;
+  score = 0; lives = diff().lives; level = 1;
   spawnTimer = 0; shootCooldown = 0; invuln = 2; levelTimer = 0;
   state = 'playing';
   overlay.classList.add('hidden');
@@ -147,7 +338,7 @@ function spawnEnemy() {
     ...t,
     x: t.r + Math.random() * (W - t.r * 2), y: -t.r,
     baseX: 0, age: 0, maxHp: t.hp,
-    speed: t.speed * (1 + (level - 1) * 0.12),
+    speed: t.speed * (1 + (level - 1) * 0.12) * diff().speed,
     fireTimer: 1 + Math.random() * 1.5,
   });
   enemies[enemies.length - 1].baseX = enemies[enemies.length - 1].x;
@@ -162,8 +353,7 @@ function explode(x, y, color, n = 18) {
 
 // ---------- Update ----------
 function update(dt) {
-  // stars
-  for (const s of stars) { s.y += s.v * dt; if (s.y > H) { s.y = 0; s.x = Math.random() * W; } }
+  updateBackground(dt);
 
   // level up every 20 seconds
   levelTimer += dt;
@@ -181,7 +371,7 @@ function update(dt) {
 
   // shooting
   shootCooldown -= dt;
-  if ((keys.Space || touchX !== null) && shootCooldown <= 0) {
+  if ((keys.Space || touchX !== null || settings.autoFire === 'true') && shootCooldown <= 0) {
     shootCooldown = 0.18;
     const angles = player.spread > 0 ? [-0.18, 0, 0.18] : [0];
     for (const a of angles) {
@@ -198,7 +388,7 @@ function update(dt) {
   spawnTimer -= dt;
   if (spawnTimer <= 0) {
     spawnEnemy();
-    spawnTimer = Math.max(0.3, 1.1 - level * 0.08) * (0.6 + Math.random() * 0.8);
+    spawnTimer = Math.max(0.3, 1.1 - level * 0.08) * (0.6 + Math.random() * 0.8) * diff().spawn;
   }
   for (const e of enemies) {
     e.age += dt;
@@ -320,13 +510,7 @@ function drawEnemy(e) {
 }
 
 function draw() {
-  ctx.fillStyle = '#0a0d1f';
-  ctx.fillRect(0, 0, W, H);
-
-  for (const s of stars) {
-    ctx.fillStyle = `rgba(200,210,255,${s.s / 2.5})`;
-    ctx.fillRect(s.x, s.y, s.s, s.s);
-  }
+  drawBackground();
   if (state === 'menu') return;
 
   // bullets
@@ -362,6 +546,9 @@ function draw() {
   ctx.fillStyle = '#e8ecff'; ctx.font = 'bold 18px Segoe UI, sans-serif';
   ctx.textAlign = 'left'; ctx.fillText(`Score: ${score}`, 12, 26);
   ctx.textAlign = 'center'; ctx.fillText(`Level ${level}`, W / 2, 26);
+  ctx.font = '12px Segoe UI, sans-serif'; ctx.fillStyle = '#8a93c0';
+  ctx.fillText(MAPS[currentMap()], W / 2, 44);
+  ctx.font = 'bold 18px Segoe UI, sans-serif';
   ctx.textAlign = 'right'; ctx.fillStyle = '#ff5c8a';
   ctx.fillText('♥'.repeat(Math.max(0, lives)), W - 12, 26);
   if (player.spread > 0) {
@@ -383,7 +570,7 @@ function loop(now) {
 // animated menu background
 (function menuLoop() {
   if (state === 'menu') {
-    for (const s of stars) { s.y += s.v / 60; if (s.y > H) s.y = 0; }
+    updateBackground(1 / 60);
     draw();
     requestAnimationFrame(menuLoop);
   }
