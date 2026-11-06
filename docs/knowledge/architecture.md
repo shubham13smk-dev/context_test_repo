@@ -6,4 +6,9 @@ Each entry is one of: Decision (and why), Gotcha, Rejected approach (and why), C
 Put "_Updated YYYY-MM-DD by <name> — related: <paths>_" under each section you change.
 -->
 
-_No entries yet._
+## Maps / backgrounds
+
+- **Decision:** maps change only the background. They have no effect on gameplay (no obstacles, no collisions, no change to enemies). Why: "Change map each level" swaps maps every level, so balance must be identical on every map. Difficulty is a separate setting.
+
+_Updated 2026-11-06 by shubham shetmandrekar — related: index.html_
+
