@@ -1,3 +1,7 @@
+---
+audience: technical
+owner: Developers
+---
 # Conventions
 
 <!--
@@ -11,4 +15,12 @@ Put "_Updated YYYY-MM-DD by <name> — related: <paths>_" under each section you
 - Background scenery (e.g. asteroids) stays dim and grey. Bright, saturated colours are reserved for things that can hit you: enemies, bullets, power-ups. Why: scenery that looks like an enemy makes players dodge harmless things.
 
 _Updated 2026-11-06 by shubham shetmandrekar — related: index.html_
+
+- The palette is a small fixed set of hex literals, written inline at each use — there are no CSS
+  custom properties or shared colour constants, and the same colour appears in both the stylesheet
+  and the canvas drawing code. Each colour carries meaning: cyan is the player, pink is enemy fire
+  and lives, green is the spread shot, and each enemy type owns its own colour, which its explosion
+  reuses. Changing a colour means changing every literal for it, so search the whole file.
+
+_Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
 

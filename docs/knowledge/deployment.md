@@ -1,3 +1,7 @@
+---
+audience: technical
+owner: Developers
+---
 # Deployment
 
 <!--
@@ -7,3 +11,10 @@ Put "_Updated YYYY-MM-DD by <name> — related: <paths>_" under each section you
 -->
 
 _No entries yet._
+
+There is nothing in the repository to describe: no CI workflow, no build or release script, no
+hosting or infrastructure configuration, and no environment configuration. The game is a static
+page that can be served from anywhere, but whether and how it is actually published is unknown —
+see question 8 in [open-questions.md](open-questions.md).
+
+_Drafted 2026-11-06 by knowledge-bootstrap — related: (none)_
