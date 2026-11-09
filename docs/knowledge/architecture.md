@@ -22,8 +22,13 @@ _Updated 2026-11-07 by shubham shetmandrekar — related: index.html_
   dependencies, no modules, no framework. A change is a page reload away.
 - The playfield is a fixed 480×640 2D canvas. Overlay screens (title, paused, game over) are plain
   DOM on top of the canvas rather than drawn into it, so they get real buttons and HTML text.
+- Full-screen panels (Settings, High Scores, Hangar) all open and close through `showPanel` /
+  `closePanel`, which track the single open panel in `openPanel`; Escape closes whichever is open.
+  A new panel must use these, not its own `xOpen` flag. Why: with per-panel flags every panel had to
+  be wired into the Escape handler by hand, and a merge left that handler calling a removed
+  function, so every key press threw an error.
 
-_Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
+_Updated 2026-11-09 by shubham shetmandrekar — related: index.html_
 
 ## State machine and the loop
 
@@ -59,10 +64,16 @@ _Updated 2026-11-09 by shubham shetmandrekar — related: index.html_
 
 ## Persistence
 
-- Two things are saved in local storage: the high score and the player's settings (map, change map
-  each level, difficulty, auto-fire, selected ship). Every read and write is wrapped in
-  `try`/`catch`, so the game still runs where storage is unavailable or blocked; both then reset
-  each session.
+- Three things are saved in local storage: the high score (`starBlasterHigh`), the top 5 scores
+  (`starBlasterScores`) and the player's settings (map, change map each level, difficulty,
+  auto-fire, selected ship). Every read and write is wrapped in `try`/`catch`, so the game still
+  runs where storage is unavailable or blocked; all then reset each session.
+- `starBlasterHigh` is still written alongside the top-5 list, and a best score saved before the
+  list existed is seeded as its first entry. Why: older players keep their best score, and ship
+  unlocks keep reading `highScore` unchanged.
+- That seeded entry has `level` and `difficulty` set to `null` (they were never saved). The loader
+  must accept `null` there, or the old best score is filtered out and silently lost on the next
+  reload.
 - Saved settings are checked against the list of valid options when loaded. Any unknown or invalid
   value falls back to the default, so a renamed or removed option never breaks the game.
 - The saved ship is also checked against the high score, on load and again when a run starts. A

@@ -130,3 +130,12 @@ adjust, in particular:
 
 Raised by: shubham shetmandrekar (2026-11-09)
 _related: index.html, docs/knowledge/business-rules.md_
+
+## 12. Should high scores be ranked per difficulty? — for the PM / BA
+
+The High Scores screen keeps one top-5 list for all difficulties, so an Easy run and a Hard run
+compete directly. Each entry shows its difficulty. Should there be a separate list per difficulty,
+or a single list as today? Relatedly: should 0-point runs stay unrecorded?
+
+Raised by: shubham shetmandrekar (2026-11-09)
+_related: index.html, docs/knowledge/business-rules.md_
