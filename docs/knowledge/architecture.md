@@ -41,8 +41,11 @@ _Updated 2026-11-09 by shubham shetmandrekar — related: index.html_
   sweeping.
 - Pausing and resuming resets the loop's time reference, so time spent paused does not count
   towards the level timer or any cooldown.
+- The title-screen loop (`menuLoop`) stops itself as soon as the state leaves `menu`. Anything that
+  returns to the title screen (today: Exit from pause) must call `menuLoop()` again, or the title
+  background stays frozen.
 
-_Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
+_Updated 2026-11-09 by shubham shetmandrekar — related: index.html_
 
 ## Entities and collisions
 

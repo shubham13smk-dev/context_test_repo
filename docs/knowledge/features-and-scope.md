@@ -17,9 +17,11 @@ Put "_Updated YYYY-MM-DD by <name> — related: <paths>_" under each section you
 - Shooting is manual on keyboard (unless auto-fire is switched on in Settings) and automatic while a
   finger or pointer is held down.
 - The run can be paused and resumed at any time while playing.
+- From the pause screen the player can **exit to the main menu**, which abandons the run. An exited
+  run is not recorded in High Scores (see business-rules.md).
 - A run can be started from the opening screen or restarted from the game-over screen.
 
-_Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
+_Updated 2026-11-09 by shubham shetmandrekar — related: index.html_
 
 ## In the product today — enemies and difficulty
 
@@ -44,13 +46,16 @@ _Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
 
 ## In the product today — controls and presentation
 
-- Keyboard: arrow keys or A/D to move, space to shoot, P to pause, Enter or space to start.
-- Touch and mouse: drag to move, hold to fire.
+- Keyboard: arrow keys or A/D to move, space to shoot, P or Esc to pause **and resume**, Enter or
+  space to start.
+- Touch and mouse: drag to move, hold to fire, and a **❚❚ button** (top right, shown only during
+  play) to pause. Why: before it, touch players had no way to pause at all.
+- The pause screen has **Resume** and **Exit to Main Menu** buttons, plus High Scores and Settings.
 - A moving background plays behind the opening screen and during the game. There are four to choose
   from (Deep Space, Nebula, Asteroid Field, Cyber Grid). They are scenery only and never affect play.
 - Explosions, engine flame and a blinking ship after being hit give visual feedback.
 
-_Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
+_Updated 2026-11-09 by shubham shetmandrekar — related: index.html_
 
 ## In the product today — settings
 
