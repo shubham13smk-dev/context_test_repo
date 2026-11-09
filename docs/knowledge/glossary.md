@@ -29,5 +29,16 @@ Put "_Updated YYYY-MM-DD by <name> — related: <paths>_" under each section you
   collides with anything and never affects play.
 - **Map** — one of four selectable background themes (Deep Space, Nebula, Asteroid Field, Cyber
   Grid). A map is scenery only; it never changes gameplay.
+- **Ship** — the player's craft. There are six, each with its own speed, fire rate, damage, hitbox
+  and invulnerability time; the choice is fixed for the whole run.
+- **Hangar** — the ship selection screen, opened from the opening and game-over screens. Not
+  available while paused.
+- **Unlock** — a ship becomes selectable once the high score in that browser reaches its threshold.
+- **Falcon** — the default ship and the original stats; the baseline every other ship is compared to.
+- **Dart** — fast ship with a tiny hitbox, fires slowly.
+- **Twin** — ship with two parallel cannons; wider, so easier to hit.
+- **Bulwark** — slow, large ship whose bullets deal double damage.
+- **Stinger** — rapid-fire ship with fast bullets, slower to move.
+- **Phantom** — ship that stays invulnerable for longer (3.5s) after each hit.
 
-_Updated 2026-11-07 by shubham shetmandrekar — related: index.html, docs/knowledge/architecture.md_
+_Updated 2026-11-09 by shubham shetmandrekar — related: index.html, docs/knowledge/business-rules.md_

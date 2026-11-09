@@ -36,8 +36,8 @@
   button.secondary:hover { background: #2bd4ff22; }
   .panel {
     position: absolute; inset: 0; padding: 28px 24px;
-    display: flex; flex-direction: column; align-items: stretch; justify-content: center; gap: 18px;
-    background: rgba(5, 6, 15, 0.9); border-radius: 8px;
+    display: flex; flex-direction: column; align-items: stretch; justify-content: safe center; gap: 18px;
+    background: rgba(5, 6, 15, 0.9); border-radius: 8px; overflow-y: auto; /* short windows: scroll, don't clip */
   }
   .panel.hidden { display: none; }
   .panel h2 { text-align: center; font-size: 30px; letter-spacing: 3px; color: #7cf3ff; text-shadow: 0 0 14px #2bd4ff; }
@@ -62,6 +62,35 @@
   .seg button.active { background: #2bd4ff; color: #05060f; border-color: #2bd4ff; }
   .seg.maps button { flex-basis: 45%; }
   .hint { font-size: 12px; color: #6b739c; margin-top: 4px; }
+  .btn-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
+  #hangar {
+    position: absolute; inset: 0; padding: 16px 14px;
+    display: flex; flex-direction: column; align-items: stretch; justify-content: safe center; gap: 8px;
+    background: rgba(5, 6, 15, 0.92); border-radius: 8px; overflow-y: auto;
+  }
+  #hangar.hidden { display: none; }
+  #hangar h2 { text-align: center; font-size: 28px; letter-spacing: 3px; color: #7cf3ff; text-shadow: 0 0 14px #2bd4ff; }
+  #shipGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .ship-card {
+    margin: 0; padding: 6px 8px; font-size: 12px; font-weight: 400; text-align: left;
+    background: #141936; color: #aab3e0; border: 1px solid #2a3170; border-radius: 6px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .ship-card:hover { background: #1d2450; }
+  .ship-card.active { border: 2px solid #2bd4ff; background: #12284a; }
+  .ship-card.locked { opacity: 0.55; cursor: not-allowed; }
+  .ship-card.locked:hover { background: #141936; }
+  .ship-head { display: flex; align-items: center; gap: 8px; }
+  .ship-head canvas { border: none; border-radius: 4px; background: #0a0d1f; flex: none; }
+  .ship-name { font-size: 15px; font-weight: 700; color: #e8ecff; }
+  .ship-tag { font-size: 11px; color: #6b739c; }
+  .ship-card.active .ship-tag { color: #7cf3ff; }
+  .stat { display: flex; align-items: center; gap: 6px; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #8a93c0; }
+  .stat span { width: 62px; flex: none; white-space: nowrap; }
+  .bar { flex: 1; height: 5px; background: #ffffff1a; border-radius: 3px; overflow: hidden; }
+  .bar i { display: block; height: 100%; background: #7cf3ff; }
+  #shipDesc { text-align: center; font-size: 13px; color: #aab3e0; min-height: 18px; }
+  #closeHangar { align-self: center; margin-top: 0; }
 </style>
 </head>
 <body>
@@ -75,8 +104,17 @@
       Pause: <b>P</b>
     </p>
     <button id="startBtn">Start Game</button>
-    <button id="scoresBtn" class="secondary">High Scores</button>
-    <button id="settingsBtn" class="secondary">Settings</button>
+    <div class="btn-row">
+      <button id="hangarBtn" class="secondary">Hangar</button>
+      <button id="scoresBtn" class="secondary">High Scores</button>
+      <button id="settingsBtn" class="secondary">Settings</button>
+    </div>
+  </div>
+  <div id="hangar" class="hidden">
+    <h2>HANGAR</h2>
+    <div id="shipGrid"></div>
+    <div id="shipDesc"></div>
+    <button id="closeHangar">Back</button>
   </div>
   <div id="scores" class="panel hidden">
     <h2>HIGH SCORES</h2>
@@ -159,21 +197,69 @@ const DIFFICULTY = {
   normal: { label: 'Normal', speed: 1,    spawn: 1,    lives: 3 },
   hard:   { label: 'Hard',   speed: 1.25, spawn: 0.75, lives: 2 },
 };
+// Player ships. Falcon is the original ship and must keep these exact stats (they are the
+// documented baseline). All ships stay in cyan/blue tones: cyan means "the player".
+//   speed: px/s · cooldown: s between shots · damage: hp per bullet · hitR: hit radius
+//   guns: x offsets of the barrels · invuln: s of invulnerability after a hit · unlock: high score needed
+const SHIPS = {
+  falcon: {
+    name: 'Falcon', desc: 'All-rounder. The ship every pilot starts with.',
+    speed: 320, cooldown: 0.18, damage: 1, bulletSpeed: 600, hitR: 14, guns: [0], invuln: 2, unlock: 0,
+    color: '#7cf3ff', glow: '#2bd4ff', w: 34,
+    pts: [[0, -19], [17, 16], [6, 10], [-6, 10], [-17, 16]], flames: [0], cockpit: [0, -2],
+  },
+  dart: {
+    name: 'Dart', desc: 'Very fast with a tiny hitbox, but fires slowly.',
+    speed: 430, cooldown: 0.24, damage: 1, bulletSpeed: 650, hitR: 10, guns: [0], invuln: 2, unlock: 300,
+    color: '#c8f6ff', glow: '#7cf3ff', w: 20,
+    pts: [[0, -24], [9, 16], [0, 10], [-9, 16]], flames: [0], cockpit: [0, -4],
+  },
+  twin: {
+    name: 'Twin', desc: 'Two parallel cannons. Wider, so easier to hit.',
+    speed: 290, cooldown: 0.24, damage: 1, bulletSpeed: 600, hitR: 16, guns: [-11, 11], invuln: 2, unlock: 600,
+    color: '#5ce1e6', glow: '#1fb5c4', w: 38,
+    pts: [[0, -12], [6, 2], [13, -16], [19, 16], [-19, 16], [-13, -16], [-6, 2]], flames: [-12, 12], cockpit: [0, 4],
+  },
+  bulwark: {
+    name: 'Bulwark', desc: 'Slow and big, but every shot deals double damage.',
+    speed: 240, cooldown: 0.3, damage: 2, bulletSpeed: 520, hitR: 18, guns: [0], invuln: 2, unlock: 1000,
+    color: '#4d9fff', glow: '#2b6cff', w: 42,
+    pts: [[-10, -18], [10, -18], [21, 2], [15, 16], [-15, 16], [-21, 2]], flames: [-8, 8], cockpit: [0, -4],
+  },
+  stinger: {
+    name: 'Stinger', desc: 'Rapid fire with fast bullets. Hard to steer.',
+    speed: 270, cooldown: 0.11, damage: 1, bulletSpeed: 760, hitR: 14, guns: [0], invuln: 2, unlock: 1600,
+    color: '#9be7ff', glow: '#3fc6ff', w: 30,
+    pts: [[-5, -22], [0, -12], [5, -22], [15, 14], [0, 8], [-15, 14]], flames: [0], cockpit: [0, -2],
+  },
+  phantom: {
+    name: 'Phantom', desc: 'Stays invulnerable longer after each hit.',
+    speed: 340, cooldown: 0.2, damage: 1, bulletSpeed: 620, hitR: 13, guns: [0], invuln: 3.5, unlock: 2500,
+    color: '#a0c4ff', glow: '#6b8cff', w: 40,
+    pts: [[0, -16], [21, 14], [8, 9], [0, 14], [-8, 9], [-21, 14]], flames: [-6, 6], cockpit: [0, -1],
+  },
+};
+const isUnlocked = key => highScore >= SHIPS[key].unlock;
+
 const SETTING_OPTIONS = {
   map: MAPS,
   cycleMaps: { false: 'Off', true: 'On' },
   difficulty: Object.fromEntries(Object.entries(DIFFICULTY).map(([k, v]) => [k, v.label])),
   autoFire: { false: 'Off', true: 'On' },
+  ship: Object.fromEntries(Object.entries(SHIPS).map(([k, v]) => [k, v.name])),
 };
-const settings = { map: 'space', cycleMaps: 'false', difficulty: 'normal', autoFire: 'false' };
+const settings = { map: 'space', cycleMaps: 'false', difficulty: 'normal', autoFire: 'false', ship: 'falcon' };
 try {
   const saved = JSON.parse(localStorage.getItem('starBlasterSettings') || '{}');
   for (const k in settings) if (saved[k] in SETTING_OPTIONS[k]) settings[k] = saved[k];
 } catch (e) {}
+// a saved ship can become locked again if the high score was cleared
+if (!isUnlocked(settings.ship)) settings.ship = 'falcon';
+const saveSettings = () => { try { localStorage.setItem('starBlasterSettings', JSON.stringify(settings)); } catch (e) {} };
 
 const settingsEl = document.getElementById('settings');
 const settingsBtn = document.getElementById('settingsBtn');
-let openPanel = null; // the settings or high-scores panel while it is showing
+let openPanel = null; // the Settings, High Scores or Hangar panel while it is showing
 
 function renderSettings() {
   for (const seg of settingsEl.querySelectorAll('.seg')) {
@@ -185,7 +271,7 @@ function renderSettings() {
       if (settings[key] === value) b.classList.add('active');
       b.addEventListener('click', () => {
         settings[key] = value;
-        try { localStorage.setItem('starBlasterSettings', JSON.stringify(settings)); } catch (e) {}
+        saveSettings();
         renderSettings();
         if (state !== 'menu') draw(); // menu redraws itself; refresh the frozen frame otherwise
       });
@@ -212,9 +298,12 @@ function renderScores() {
   });
 }
 
+// Settings, High Scores and Hangar are full-screen panels; only one is open at a time.
 function showPanel(el) {
   openPanel = el;
-  if (el === settingsEl) renderSettings(); else renderScores();
+  if (el === settingsEl) renderSettings();
+  else if (el === scoresEl) renderScores();
+  else renderHangar();
   overlay.classList.add('hidden');
   el.classList.remove('hidden');
 }
@@ -228,6 +317,53 @@ settingsBtn.addEventListener('click', () => showPanel(settingsEl));
 document.getElementById('scoresBtn').addEventListener('click', () => showPanel(scoresEl));
 document.getElementById('closeSettings').addEventListener('click', closePanel);
 document.getElementById('closeScores').addEventListener('click', closePanel);
+
+// ---------- Hangar (ship selection) ----------
+const hangarEl = document.getElementById('hangar');
+const hangarBtn = document.getElementById('hangarBtn');
+const shipGrid = document.getElementById('shipGrid');
+const shipDesc = document.getElementById('shipDesc');
+
+// stat bars, normalised against the best ship in each stat
+const SHIP_LIST = Object.values(SHIPS);
+const maxOf = f => Math.max(...SHIP_LIST.map(f));
+const dps = s => s.guns.length * s.damage / s.cooldown;
+const STATS = [
+  ['Speed',     s => s.speed / maxOf(t => t.speed)],
+  ['Fire rate', s => (1 / s.cooldown) / maxOf(t => 1 / t.cooldown)],
+  ['Damage',    s => dps(s) / maxOf(dps)],
+  ['Evasion',   s => 1 - (s.hitR - 8) / 12], // smaller hitbox = harder to hit
+];
+
+function renderHangar() {
+  shipGrid.innerHTML = '';
+  for (const [key, s] of Object.entries(SHIPS)) {
+    const unlocked = isUnlocked(key);
+    const card = document.createElement('button');
+    card.className = 'ship-card' + (settings.ship === key ? ' active' : '') + (unlocked ? '' : ' locked');
+    const tag = !unlocked ? `🔒 Score ${s.unlock} to unlock` : settings.ship === key ? 'Selected' : 'Available';
+    card.innerHTML = `
+      <div class="ship-head">
+        <canvas width="48" height="48"></canvas>
+        <div><div class="ship-name">${s.name}</div><div class="ship-tag">${tag}</div></div>
+      </div>
+      ${STATS.map(([label, f]) => `<div class="stat"><span>${label}</span><div class="bar"><i style="width:${Math.round(Math.max(0.08, Math.min(1, f(s))) * 100)}%"></i></div></div>`).join('')}`;
+    const pc = card.querySelector('canvas').getContext('2d');
+    pc.save(); pc.scale(0.95, 0.95); drawShip(pc, 25, 22, s, unlocked); pc.restore();
+    card.addEventListener('mouseenter', () => { shipDesc.textContent = s.desc; });
+    card.addEventListener('mouseleave', () => { shipDesc.textContent = SHIPS[settings.ship].desc; });
+    card.addEventListener('click', () => {
+      if (!unlocked) { shipDesc.textContent = `${s.name} unlocks at a high score of ${s.unlock} (yours: ${highScore}).`; return; }
+      settings.ship = key;
+      saveSettings();
+      renderHangar();
+    });
+    shipGrid.appendChild(card);
+  }
+  shipDesc.textContent = SHIPS[settings.ship].desc;
+}
+hangarBtn.addEventListener('click', () => showPanel(hangarEl));
+document.getElementById('closeHangar').addEventListener('click', closePanel);
 
 const diff = () => DIFFICULTY[settings.difficulty];
 function currentMap() {
@@ -261,7 +397,7 @@ addEventListener('pointerup', () => { touchX = null; });
 // ---------- Game state ----------
 let state = 'menu';
 let player, bullets, enemies, enemyBullets, particles, powerups, stars;
-let score, lives, level, spawnTimer, shootCooldown, invuln, lastTime, levelTimer;
+let score, lives, level, spawnTimer, shootCooldown, invuln, lastTime, levelTimer, startHigh;
 
 stars = Array.from({ length: 80 }, () => ({
   x: Math.random() * W, y: Math.random() * H,
@@ -347,7 +483,9 @@ function drawBackground() {
 }
 
 function startGame() {
-  player = { x: W / 2, y: H - 70, w: 34, h: 38, speed: 320, spread: 0 };
+  const ship = SHIPS[isUnlocked(settings.ship) ? settings.ship : 'falcon'];
+  player = { x: W / 2, y: H - 70, w: ship.w, h: 38, speed: ship.speed, spread: 0, ship };
+  startHigh = highScore;
   bullets = []; enemies = []; enemyBullets = []; particles = []; powerups = [];
   score = 0; lives = diff().lives; level = 1;
   spawnTimer = 0; shootCooldown = 0; invuln = 2; levelTimer = 0;
@@ -374,6 +512,7 @@ function showOverlay(title, html, btnText) {
   msgEl.innerHTML = html;
   startBtn.style.display = btnText ? '' : 'none';
   if (btnText) startBtn.textContent = btnText;
+  hangarBtn.style.display = state === 'paused' ? 'none' : ''; // no ship swaps mid-run
   overlay.classList.remove('hidden');
 }
 
@@ -384,8 +523,12 @@ function gameOver() {
     highScore = score;
     try { localStorage.setItem('starBlasterHigh', highScore); } catch (e) {}
   }
+  const newShips = SHIP_LIST.filter(s => s.unlock > startHigh && s.unlock <= highScore);
+  const unlockMsg = newShips.length
+    ? `<br><span style="color:#7cf3ff">New ship unlocked: <b>${newShips.map(s => s.name).join(', ')}</b>. Pick it in the Hangar!</span>`
+    : '';
   showOverlay('GAME OVER',
-    `Score: <b>${score}</b> &nbsp; Level: <b>${level}</b><br>High score: <b>${highScore}</b>`,
+    `Score: <b>${score}</b> &nbsp; Level: <b>${level}</b><br>High score: <b>${highScore}</b>${unlockMsg}`,
     'Play Again');
 }
 
@@ -439,10 +582,16 @@ function update(dt) {
   // shooting
   shootCooldown -= dt;
   if ((keys.Space || touchX !== null || settings.autoFire === 'true') && shootCooldown <= 0) {
-    shootCooldown = 0.18;
+    const s = player.ship;
+    shootCooldown = s.cooldown;
     const angles = player.spread > 0 ? [-0.18, 0, 0.18] : [0];
-    for (const a of angles) {
-      bullets.push({ x: player.x, y: player.y - player.h / 2, vx: Math.sin(a) * 600, vy: -Math.cos(a) * 600 });
+    for (const gx of s.guns) {
+      for (const a of angles) {
+        bullets.push({
+          x: player.x + gx, y: player.y - player.h / 2,
+          vx: Math.sin(a) * s.bulletSpeed, vy: -Math.cos(a) * s.bulletSpeed, dmg: s.damage,
+        });
+      }
     }
   }
   if (player.spread > 0) player.spread -= dt;
@@ -475,7 +624,7 @@ function update(dt) {
   for (const b of bullets) {
     for (const e of enemies) {
       if (e.hp > 0 && Math.hypot(b.x - e.x, b.y - e.y) < e.r + 3) {
-        e.hp--; b.y = -100;
+        e.hp -= b.dmg; b.y = -100;
         explode(b.x, b.y + 100, '#ffffff', 4);
         if (e.hp <= 0) {
           score += e.points;
@@ -508,7 +657,7 @@ function update(dt) {
 
   // player hit
   if (invuln <= 0) {
-    const hitR = 14;
+    const hitR = player.ship.hitR;
     let hit = false;
     enemyBullets = enemyBullets.filter(b => {
       if (Math.hypot(b.x - player.x, b.y - player.y) < hitR + 4) { hit = true; return false; }
@@ -521,7 +670,7 @@ function update(dt) {
     if (hit) {
       lives--;
       explode(player.x, player.y, '#7cf3ff', 30);
-      invuln = 2;
+      invuln = player.ship.invuln;
       player.spread = 0;
       if (lives <= 0) { gameOver(); }
     }
@@ -533,22 +682,25 @@ function update(dt) {
 }
 
 // ---------- Draw ----------
-function drawShip(x, y) {
-  ctx.save();
-  ctx.translate(x, y);
-  // flame
-  ctx.fillStyle = Math.random() < 0.5 ? '#ffb84d' : '#ff5c2a';
-  ctx.beginPath(); ctx.moveTo(-7, 16); ctx.lineTo(0, 26 + Math.random() * 6); ctx.lineTo(7, 16); ctx.fill();
-  // body
-  ctx.fillStyle = '#7cf3ff';
-  ctx.shadowColor = '#2bd4ff'; ctx.shadowBlur = 14;
-  ctx.beginPath();
-  ctx.moveTo(0, -19); ctx.lineTo(17, 16); ctx.lineTo(6, 10); ctx.lineTo(-6, 10); ctx.lineTo(-17, 16);
-  ctx.closePath(); ctx.fill();
-  ctx.shadowBlur = 0;
-  ctx.fillStyle = '#05060f';
-  ctx.beginPath(); ctx.ellipse(0, -2, 4, 7, 0, 0, Math.PI * 2); ctx.fill();
-  ctx.restore();
+// Draws a player ship on any 2D context (the game canvas or a Hangar preview).
+function drawShip(c, x, y, ship, flame = true) {
+  c.save();
+  c.translate(x, y);
+  if (flame) {
+    c.fillStyle = Math.random() < 0.5 ? '#ffb84d' : '#ff5c2a';
+    for (const fx of ship.flames) {
+      c.beginPath(); c.moveTo(fx - 7, 16); c.lineTo(fx, 26 + Math.random() * 6); c.lineTo(fx + 7, 16); c.fill();
+    }
+  }
+  c.fillStyle = ship.color;
+  c.shadowColor = ship.glow; c.shadowBlur = 14;
+  c.beginPath();
+  for (const [px, py] of ship.pts) c.lineTo(px, py);
+  c.closePath(); c.fill();
+  c.shadowBlur = 0;
+  c.fillStyle = '#05060f';
+  c.beginPath(); c.ellipse(ship.cockpit[0], ship.cockpit[1], 4, 7, 0, 0, Math.PI * 2); c.fill();
+  c.restore();
 }
 
 function drawEnemy(e) {
@@ -583,7 +735,7 @@ function draw() {
   // bullets
   ctx.fillStyle = '#ffffff';
   ctx.shadowColor = '#7cf3ff'; ctx.shadowBlur = 8;
-  for (const b of bullets) ctx.fillRect(b.x - 2, b.y - 8, 4, 12);
+  for (const b of bullets) { const bw = b.dmg > 1 ? 7 : 4; ctx.fillRect(b.x - bw / 2, b.y - 8, bw, 12); }
   ctx.fillStyle = '#ff5c8a'; ctx.shadowColor = '#ff5c8a';
   for (const b of enemyBullets) { ctx.beginPath(); ctx.arc(b.x, b.y, 4, 0, Math.PI * 2); ctx.fill(); }
   ctx.shadowBlur = 0;
@@ -599,7 +751,7 @@ function draw() {
   }
 
   // player (blink while invulnerable)
-  if (lives > 0 && (invuln <= 0 || Math.floor(invuln * 10) % 2 === 0)) drawShip(player.x, player.y);
+  if (lives > 0 && (invuln <= 0 || Math.floor(invuln * 10) % 2 === 0)) drawShip(ctx, player.x, player.y, player.ship);
 
   // particles
   for (const p of particles) {

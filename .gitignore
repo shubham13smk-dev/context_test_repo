@@ -1,0 +1,5 @@
+# Windows Explorer folder settings
+desktop.ini
+
+# Playwright MCP screenshots / logs from local testing
+.playwright-mcp/

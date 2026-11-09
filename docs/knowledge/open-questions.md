@@ -36,7 +36,8 @@ _related: docs/knowledge/overview.md_
 Every value below is what the game does today. Please confirm each, or give the intended value.
 
 - Start with **5 / 3 / 2 lives** on Easy / Normal / Hard, capped at **5** (see question 1).
-- **2 seconds** of invulnerability at the start of a run and after each hit.
+- **2 seconds** of invulnerability at the start of a run and after each hit (after a hit this
+  depends on the ship — see question 11).
 - Being hit **cancels the spread shot**, even with time left on it.
 - Enemies are worth **10 / 25 / 50** points.
 - An enemy escaping off the bottom costs **5 points**, and the score is floored at **0**.
@@ -49,7 +50,7 @@ Every value below is what the game does today. Please confirm each, or give the 
 - **8% drop chance** per enemy, the same for every enemy type, split **50/50** between spread shot
   and extra life.
 - The spread shot lasts **8 seconds**, and collecting another **resets** rather than extends it.
-- The player can fire at most **once every 0.18 seconds**.
+- The Falcon can fire at most **once every 0.18 seconds** (other ships: see question 11).
 
 Raised by: knowledge-bootstrap (2026-11-06)
 _related: index.html, docs/knowledge/business-rules.md_
@@ -116,3 +117,16 @@ Is "scaled to fit" good enough for mobile?
 
 Raised by: knowledge-bootstrap (2026-11-06)
 _related: index.html_
+
+## 11. Are the ship stats and unlock scores intended? — for the PM / BA
+
+The six ships and their unlock thresholds (300 / 600 / 1000 / 1600 / 2500) were proposed by the
+developer, not specified. The full table is under "Ships" in business-rules.md. Please confirm or
+adjust, in particular:
+
+- Is any ship clearly better than the Falcon at everything? (Intended: each one trades something.)
+- Are the thresholds reachable for a casual player? The top ship needs a 2500-point run.
+- Should unlocks be tied to the high score at all, or to something else (e.g. total play)?
+
+Raised by: shubham shetmandrekar (2026-11-09)
+_related: index.html, docs/knowledge/business-rules.md_
