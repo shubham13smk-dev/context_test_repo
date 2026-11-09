@@ -63,6 +63,19 @@ _Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
 
 _Updated 2026-11-07 by shubham shetmandrekar — related: index.html_
 
+## In the product today — ships and the Hangar
+
+- Six player ships, each playing differently: Falcon (all-rounder, the default), Dart (fast, small,
+  slow-firing), Twin (two cannons, wider), Bulwark (slow, big, double damage), Stinger (rapid fire,
+  slower to move) and Phantom (longer invulnerability after a hit). Stats are in business-rules.md.
+- New ships unlock as the player's high score grows, so they are a reward for getting better.
+- A **Hangar** screen, reachable from the opening and game-over screens, shows every ship with a
+  preview and bars for speed, fire rate, damage and evasion. Locked ships show the score they need.
+  The chosen ship is remembered in the player's browser.
+- The game-over screen announces any ship unlocked by that run.
+
+_Updated 2026-11-09 by shubham shetmandrekar — related: index.html_
+
 ## Not in the product
 
 Things a player or reviewer might reasonably expect, which the game does not have today:

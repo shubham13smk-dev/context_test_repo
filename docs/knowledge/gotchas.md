@@ -13,14 +13,21 @@ Put "_Updated YYYY-MM-DD by <name> — related: <paths>_" under each section you
 ## Rendering
 
 - The canvas only redraws continuously while playing or on the start menu. On the pause and game-over screens it stays frozen on the last frame, so any visual change made there (e.g. picking a map in Settings) must call `draw()` itself.
+- Overlay panels (title, Settings, Hangar) sit inside the canvas-sized wrapper, and the canvas
+  shrinks to fit short browser windows. A tall panel then spills out and its title and Back button
+  are cut off. The Hangar scrolls (`overflow-y: auto` with `justify-content: safe center`) to avoid
+  this. Settings may have the same problem — not yet checked. Test new panels in a short window
+  (e.g. 500px high), not only full screen.
 
-_Updated 2026-11-06 by shubham shetmandrekar — related: index.html_
+_Updated 2026-11-09 by shubham shetmandrekar — related: index.html_
 
 ## Testing
 
 - The Playwright browser tool blocks `file://` URLs. Serve the folder over a local web server (e.g. `python -m http.server`) and open it at `http://localhost:<port>/index.html`.
+- Playwright only saves screenshots inside the repo (outside paths are refused). Save them under
+  `.playwright-mcp/`, which is git-ignored so test output never gets committed.
 
-_Updated 2026-11-06 by shubham shetmandrekar — related: index.html_
+_Updated 2026-11-09 by shubham shetmandrekar — related: index.html, .gitignore_
 
 ## Timing
 

@@ -48,18 +48,26 @@ _Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
 - Enemy types are defined in one table of literals (hit points, radius, speed, colour, points,
   whether it shoots), and a spawned enemy is a shallow copy of its table entry with per-instance
   fields added. Changing a type's balance means changing that table.
-- All collisions are circle-distance checks. The player's hit radius (14) is deliberately smaller
-  than its drawn ship, which is the usual forgiving-hitbox trick.
+- Player ships work the same way: one `SHIPS` table holds each ship's stats, shape points, colour
+  and unlock score, and the running `player` keeps a reference to its ship. Changing a ship's
+  balance or adding a ship means changing that table only; the Hangar reads it to draw cards and
+  stat bars.
+- All collisions are circle-distance checks. Each ship's hit radius is deliberately smaller than
+  its drawn shape, which is the usual forgiving-hitbox trick.
 
-_Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
+_Updated 2026-11-09 by shubham shetmandrekar — related: index.html_
 
 ## Persistence
 
 - Two things are saved in local storage: the high score and the player's settings (map, change map
-  each level, difficulty, auto-fire). Every read and write is wrapped in `try`/`catch`, so the game
-  still runs where storage is unavailable or blocked; both then reset each session.
+  each level, difficulty, auto-fire, selected ship). Every read and write is wrapped in
+  `try`/`catch`, so the game still runs where storage is unavailable or blocked; both then reset
+  each session.
 - Saved settings are checked against the list of valid options when loaded. Any unknown or invalid
   value falls back to the default, so a renamed or removed option never breaks the game.
+- The saved ship is also checked against the high score, on load and again when a run starts. A
+  ship that is no longer unlocked (e.g. the high score was cleared) falls back to the Falcon rather
+  than being playable while locked.
 
-_Updated 2026-11-07 by shubham shetmandrekar — related: index.html_
+_Updated 2026-11-09 by shubham shetmandrekar — related: index.html_
 
