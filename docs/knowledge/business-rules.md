@@ -40,6 +40,9 @@ _Updated 2026-11-09 by shubham shetmandrekar — related: index.html_
   and the difficulty played. The best of them is shown at the end of a run. They are stored on the
   player's own device only.
 - A run that ends on **0 points** is not recorded. ⚠ Needs PM/BA confirmation.
+- A run the player **exits from the pause screen** is not recorded either, and does not count
+  toward ship unlocks. Why: it was abandoned, not finished, and quitting should not be a way to
+  bank a score. ⚠ Needs PM/BA confirmation — see question 13 in open-questions.md.
 - All difficulties share **one list**, so Easy and Hard scores are ranked together. ⚠ See question
   12 in open-questions.md.
 

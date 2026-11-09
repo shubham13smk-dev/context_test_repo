@@ -44,6 +44,9 @@ _Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
 - The pointer handlers are split deliberately: `pointerdown` and `pointermove` are on the canvas,
   but `pointerup` is on the window. If `pointerup` moves onto the canvas, releasing outside it
   leaves the ship stuck moving and auto-firing.
+- Escape has two jobs, checked in this order: if a panel (Settings, High Scores, Hangar) is open it
+  only closes that panel; otherwise, during a run, it pauses or resumes. Any new Escape behaviour
+  must fit that order, or one press will both close a panel and resume the run.
 
-_Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
+_Updated 2026-11-09 by shubham shetmandrekar — related: index.html_
 

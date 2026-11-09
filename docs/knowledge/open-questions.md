@@ -139,3 +139,12 @@ or a single list as today? Relatedly: should 0-point runs stay unrecorded?
 
 Raised by: shubham shetmandrekar (2026-11-09)
 _related: index.html, docs/knowledge/business-rules.md_
+
+## 13. Should an exited run count? — for the PM / BA
+
+Exiting to the main menu from the pause screen abandons the run: its score is not recorded in High
+Scores and does not unlock ships. Is that intended, or should the score so far be kept as if the
+run had ended?
+
+Raised by: shubham shetmandrekar (2026-11-09)
+_related: index.html, docs/knowledge/business-rules.md_
