@@ -112,6 +112,7 @@
       Pause: <b>P</b> / <b>Esc</b> (or the <b>❚❚</b> button)
     </p>
     <button id="startBtn">Start Game</button>
+    <button id="exitBtn" class="secondary" style="display:none">Exit to Main Menu</button>
     <div class="btn-row">
       <button id="hangarBtn" class="secondary">Hangar</button>
       <button id="scoresBtn" class="secondary">High Scores</button>
@@ -527,8 +528,22 @@ function showOverlay(title, html, btnText) {
   startBtn.style.display = btnText ? '' : 'none';
   if (btnText) startBtn.textContent = btnText;
   hangarBtn.style.display = state === 'paused' ? 'none' : ''; // no ship swaps mid-run
+  exitBtn.style.display = state === 'paused' ? '' : 'none';
   overlay.classList.remove('hidden');
 }
+
+// Exit from pause: abandon the run (not recorded in High Scores) and go back to the title screen.
+const exitBtn = document.getElementById('exitBtn');
+const titleHTML = msgEl.innerHTML;
+function exitToMenu() {
+  if (state !== 'paused') return;
+  state = 'menu';
+  touchX = null;
+  for (const k in keys) keys[k] = false;
+  showOverlay('STAR BLASTER', titleHTML, 'Start Game');
+  menuLoop();
+}
+exitBtn.addEventListener('click', exitToMenu);
 
 function gameOver() {
   state = 'over';
@@ -801,14 +816,15 @@ function loop(now) {
   if (state === 'playing') requestAnimationFrame(loop);
 }
 
-// animated menu background
-(function menuLoop() {
+// animated menu background (restarted by exitToMenu)
+function menuLoop() {
   if (state === 'menu') {
     updateBackground(1 / 60);
     draw();
     requestAnimationFrame(menuLoop);
   }
-})();
+}
+menuLoop();
 </script>
 </body>
 </html>
