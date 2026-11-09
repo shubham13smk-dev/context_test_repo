@@ -23,10 +23,11 @@ _Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
 
 - Everything — markup, styles and the whole game — is in `index.html`. There is no source tree and
   no watch process; reload the page to see a change.
-- The game stores the high score under the browser key `starBlasterHigh`. Clear it from the
-  browser's local storage to test the first-run experience.
+- The game uses two local-storage keys: `starBlasterHigh` (high score) and `starBlasterSettings`
+  (map, difficulty, auto-fire). Clear **both** to test a true first run — clearing only the high
+  score leaves the saved settings in place.
 
-_Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
+_Updated 2026-11-09 by shubham shetmandrekar — related: index.html_
 
 ## Testing
 
