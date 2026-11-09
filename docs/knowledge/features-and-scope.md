@@ -76,6 +76,14 @@ _Updated 2026-11-07 by shubham shetmandrekar — related: index.html_
 
 _Updated 2026-11-09 by shubham shetmandrekar — related: index.html_
 
+## In the product today — high scores
+
+- A **High Scores** screen, reachable from the opening, paused and game-over screens, lists the
+  player's 5 best runs on that browser with the level and difficulty of each. The run just played
+  is outlined if it made the list. Rules are in business-rules.md.
+
+_Updated 2026-11-09 by shubham shetmandrekar — related: index.html_
+
 ## Not in the product
 
 Things a player or reviewer might reasonably expect, which the game does not have today:

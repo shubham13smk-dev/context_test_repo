@@ -13,11 +13,11 @@ Put "_Updated YYYY-MM-DD by <name> — related: <paths>_" under each section you
 ## Rendering
 
 - The canvas only redraws continuously while playing or on the start menu. On the pause and game-over screens it stays frozen on the last frame, so any visual change made there (e.g. picking a map in Settings) must call `draw()` itself.
-- Overlay panels (title, Settings, Hangar) sit inside the canvas-sized wrapper, and the canvas
-  shrinks to fit short browser windows. A tall panel then spills out and its title and Back button
-  are cut off. The Hangar scrolls (`overflow-y: auto` with `justify-content: safe center`) to avoid
-  this. Settings may have the same problem — not yet checked. Test new panels in a short window
-  (e.g. 500px high), not only full screen.
+- Overlay panels (title, Settings, High Scores, Hangar) sit inside the canvas-sized wrapper, and
+  the canvas shrinks to fit short browser windows. A tall panel then spills out and its title and
+  Back button are cut off. Every panel therefore scrolls (`overflow-y: auto` with
+  `justify-content: safe center`; the shared `.panel` class gives this to Settings and High
+  Scores). Test new panels in a short window (e.g. 500px high), not only full screen.
 
 _Updated 2026-11-09 by shubham shetmandrekar — related: index.html_
 

@@ -36,10 +36,14 @@ _Updated 2026-11-09 by shubham shetmandrekar — related: index.html_
 - Destroying an enemy scores **10** (weak), **25** (weaving) or **50** (shooting) points.
 - An enemy that escapes off the bottom of the screen costs the player **5 points**.
 - The score can never go **below zero** — a penalty at zero points costs nothing.
-- The highest score ever reached in that browser is kept and shown at the end of a run. It is
-  stored on the player's own device only.
+- The **top 5 scores** reached in that browser are kept, best first, each with the level reached
+  and the difficulty played. The best of them is shown at the end of a run. They are stored on the
+  player's own device only.
+- A run that ends on **0 points** is not recorded. ⚠ Needs PM/BA confirmation.
+- All difficulties share **one list**, so Easy and Hard scores are ranked together. ⚠ See question
+  12 in open-questions.md.
 
-_Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
+_Updated 2026-11-09 by shubham shetmandrekar — related: index.html_
 
 ## Levels and difficulty
 
