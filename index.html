@@ -34,13 +34,24 @@
   button:hover { background: #7cf3ff; }
   button.secondary { background: transparent; color: #7cf3ff; border: 2px solid #2bd4ff; padding: 10px 30px; font-size: 16px; }
   button.secondary:hover { background: #2bd4ff22; }
-  #settings {
+  .panel {
     position: absolute; inset: 0; padding: 28px 24px;
     display: flex; flex-direction: column; align-items: stretch; justify-content: center; gap: 18px;
     background: rgba(5, 6, 15, 0.9); border-radius: 8px;
   }
-  #settings.hidden { display: none; }
-  #settings h2 { text-align: center; font-size: 30px; letter-spacing: 3px; color: #7cf3ff; text-shadow: 0 0 14px #2bd4ff; }
+  .panel.hidden { display: none; }
+  .panel h2 { text-align: center; font-size: 30px; letter-spacing: 3px; color: #7cf3ff; text-shadow: 0 0 14px #2bd4ff; }
+  .panel > button { align-self: center; }
+  #scoreList { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  #scoreList li {
+    display: grid; grid-template-columns: 32px 1fr auto; align-items: baseline; gap: 10px;
+    padding: 10px 14px; background: #141936; border: 1px solid #2a3170; border-radius: 6px;
+  }
+  #scoreList li.latest { border-color: #2bd4ff; }
+  #scoreList .rank { color: #8a93c0; font-weight: 600; }
+  #scoreList .pts { font-size: 20px; font-weight: 700; color: #e8ecff; }
+  #scoreList .meta { font-size: 12px; color: #8a93c0; text-align: right; }
+  #scoreList .empty { display: block; text-align: center; color: #6b739c; }
   .setting-label { font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px; color: #8a93c0; margin-bottom: 6px; }
   .seg { display: flex; flex-wrap: wrap; gap: 6px; }
   .seg button {
@@ -51,7 +62,6 @@
   .seg button.active { background: #2bd4ff; color: #05060f; border-color: #2bd4ff; }
   .seg.maps button { flex-basis: 45%; }
   .hint { font-size: 12px; color: #6b739c; margin-top: 4px; }
-  #closeSettings { align-self: center; }
 </style>
 </head>
 <body>
@@ -65,9 +75,15 @@
       Pause: <b>P</b>
     </p>
     <button id="startBtn">Start Game</button>
+    <button id="scoresBtn" class="secondary">High Scores</button>
     <button id="settingsBtn" class="secondary">Settings</button>
   </div>
-  <div id="settings" class="hidden">
+  <div id="scores" class="panel hidden">
+    <h2>HIGH SCORES</h2>
+    <ol id="scoreList"></ol>
+    <button id="closeScores">Back</button>
+  </div>
+  <div id="settings" class="panel hidden">
     <h2>SETTINGS</h2>
     <div>
       <div class="setting-label">Map</div>
@@ -102,6 +118,34 @@ const startBtn = document.getElementById('startBtn');
 let highScore = 0;
 try { highScore = +localStorage.getItem('starBlasterHigh') || 0; } catch (e) {}
 
+// ---------- Top scores ----------
+// Top 5 runs on this device, best first: { score, level, difficulty }.
+const TOP_N = 5;
+let topScores = [];
+let latestEntry = null; // the entry added by the most recent run, highlighted in the list
+try {
+  const saved = JSON.parse(localStorage.getItem('starBlasterScores') || '[]');
+  if (Array.isArray(saved)) {
+    topScores = saved
+      .filter(s => s && Number.isFinite(s.score) && s.score > 0 && (s.level === null || Number.isFinite(s.level)))
+      .map(s => ({ score: s.score, level: s.level, difficulty: s.difficulty }))
+      .sort((a, b) => b.score - a.score).slice(0, TOP_N);
+  }
+} catch (e) {}
+// players from before the list existed keep their best score
+if (!topScores.length && highScore > 0) topScores = [{ score: highScore, level: null, difficulty: null }];
+if (topScores.length) highScore = Math.max(highScore, topScores[0].score);
+
+function recordScore(score, level, difficulty) {
+  if (score <= 0) return;
+  const entry = { score, level, difficulty };
+  topScores.push(entry);
+  topScores.sort((a, b) => b.score - a.score);
+  topScores = topScores.slice(0, TOP_N);
+  latestEntry = topScores.includes(entry) ? entry : null;
+  try { localStorage.setItem('starBlasterScores', JSON.stringify(topScores)); } catch (e) {}
+}
+
 // ---------- Settings ----------
 const MAPS = {
   space:     'Deep Space',
@@ -129,7 +173,7 @@ try {
 
 const settingsEl = document.getElementById('settings');
 const settingsBtn = document.getElementById('settingsBtn');
-let settingsOpen = false;
+let openPanel = null; // the settings or high-scores panel while it is showing
 
 function renderSettings() {
   for (const seg of settingsEl.querySelectorAll('.seg')) {
@@ -149,19 +193,41 @@ function renderSettings() {
     }
   }
 }
-function openSettings() {
-  settingsOpen = true;
-  renderSettings();
-  overlay.classList.add('hidden');
-  settingsEl.classList.remove('hidden');
+const scoresEl = document.getElementById('scores');
+const scoreListEl = document.getElementById('scoreList');
+
+function renderScores() {
+  scoreListEl.innerHTML = '';
+  if (!topScores.length) {
+    scoreListEl.innerHTML = '<li class="empty">No scores yet — play a game!</li>';
+    return;
+  }
+  topScores.forEach((s, i) => {
+    const li = document.createElement('li');
+    if (s === latestEntry) li.classList.add('latest');
+    const meta = [s.level ? `Level ${s.level}` : '', DIFFICULTY[s.difficulty]?.label || ''].filter(Boolean).join(' · ');
+    li.innerHTML = `<span class="rank">#${i + 1}</span><span class="pts">${s.score}</span><span class="meta"></span>`;
+    li.querySelector('.meta').textContent = meta;
+    scoreListEl.appendChild(li);
+  });
 }
-function closeSettings() {
-  settingsOpen = false;
-  settingsEl.classList.add('hidden');
+
+function showPanel(el) {
+  openPanel = el;
+  if (el === settingsEl) renderSettings(); else renderScores();
+  overlay.classList.add('hidden');
+  el.classList.remove('hidden');
+}
+function closePanel() {
+  if (!openPanel) return;
+  openPanel.classList.add('hidden');
+  openPanel = null;
   overlay.classList.remove('hidden');
 }
-settingsBtn.addEventListener('click', openSettings);
-document.getElementById('closeSettings').addEventListener('click', closeSettings);
+settingsBtn.addEventListener('click', () => showPanel(settingsEl));
+document.getElementById('scoresBtn').addEventListener('click', () => showPanel(scoresEl));
+document.getElementById('closeSettings').addEventListener('click', closePanel);
+document.getElementById('closeScores').addEventListener('click', closePanel);
 
 const diff = () => DIFFICULTY[settings.difficulty];
 function currentMap() {
@@ -172,8 +238,8 @@ function currentMap() {
 // ---------- Input ----------
 const keys = {};
 addEventListener('keydown', e => {
-  if (settingsOpen) {
-    if (e.code === 'Escape') closeSettings();
+  if (openPanel) {
+    if (e.code === 'Escape') closePanel();
     return;
   }
   keys[e.code] = true;
@@ -313,6 +379,7 @@ function showOverlay(title, html, btnText) {
 
 function gameOver() {
   state = 'over';
+  recordScore(score, level, settings.difficulty);
   if (score > highScore) {
     highScore = score;
     try { localStorage.setItem('starBlasterHigh', highScore); } catch (e) {}
