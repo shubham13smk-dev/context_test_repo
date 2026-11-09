@@ -21,13 +21,15 @@ reason is ⚠ **Needs PM/BA confirmation** and the value is listed in open-quest
 - The player loses **one life** per hit, whether hit by an enemy's shot or by colliding with an
   enemy. Colliding also destroys that enemy.
 - The run ends as soon as lives reach **zero**.
-- After being hit, and for the first **2 seconds** of a run, the player cannot be hit again. The
+- For the first **2 seconds** of a run, and after being hit, the player cannot be hit again. The
+  time after a hit depends on the ship: **2 seconds**, except the Phantom at **3.5 seconds**. The
   ship blinks for the whole of that time so the state is visible.
+- How easily the player is hit depends on the ship's hitbox (see Ships).
 - Being hit also **cancels the three-way shot** immediately, even if time was left on it.
 - Lives are capped at **5**. Collecting an extra life at 5 lives gives nothing back. On Easy a run
   starts at the cap. ⚠ Needs PM/BA confirmation — see question 1 in open-questions.md.
 
-_Updated 2026-11-07 by shubham shetmandrekar — related: index.html_
+_Updated 2026-11-09 by shubham shetmandrekar — related: index.html_
 
 ## Scoring
 
@@ -71,12 +73,40 @@ _Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
 
 ## Firing
 
-- The player can fire at most **once every 0.18 seconds**, held or tapped — firing faster is not
-  possible.
-- With the three-way shot active, one shot fires **three bullets** in a narrow fan instead of one.
+- The fire rate depends on the ship (see Ships). The Falcon fires at most **once every
+  0.18 seconds**, held or tapped — no ship can fire faster than its own rate.
+- With the three-way shot active, each of the ship's cannons fires **three bullets** in a narrow
+  fan instead of one (so the Twin fires six).
 - On touch and mouse, holding down to move also fires. The player **cannot move without shooting**
   on touch. ⚠ Needs PM/BA confirmation — intended, or a side effect?
 - On keyboard, firing is manual by default. With **Auto-fire** on in Settings, the ship fires
-  continuously at the normal rate without holding space.
+  continuously at the ship's normal rate without holding space.
 
-_Updated 2026-11-07 by shubham shetmandrekar — related: index.html_
+_Updated 2026-11-09 by shubham shetmandrekar — related: index.html_
+
+## Ships
+
+The player picks one of six ships in the Hangar. Ships play differently so that the choice matters.
+The Falcon keeps the original stats, so the default game plays exactly as before.
+
+| Ship | Unlocks at high score | Speed | Time between shots | Damage per bullet | Hit radius | Invulnerable after hit |
+|---|---|---|---|---|---|---|
+| Falcon | 0 (default) | 320 | 0.18s | 1 | 14 | 2s |
+| Dart | 300 | 430 | 0.24s | 1 | 10 | 2s |
+| Twin (2 cannons) | 600 | 290 | 0.24s | 1 | 16 | 2s |
+| Bulwark | 1000 | 240 | 0.30s | 2 | 18 | 2s |
+| Stinger | 1600 | 270 | 0.11s | 1 | 14 | 2s |
+| Phantom | 2500 | 340 | 0.20s | 1 | 13 | 3.5s |
+
+- A ship is **unlocked once the best score in that browser reaches its threshold**, and stays
+  unlocked while that high score is kept. If the high score is cleared, a selected ship that is no
+  longer unlocked falls back to the Falcon.
+- The ship **cannot be changed during a run**. The Hangar opens only from the opening and game-over
+  screens, not from pause. Why: swapping stats mid-run would let a player switch ships to suit the
+  moment, e.g. to the Phantom just before taking a hit.
+- When a run raises the high score past a threshold, the game-over screen says which ship was
+  unlocked.
+- ⚠ Needs PM/BA confirmation: all stats and thresholds were proposed by the developer. See
+  question 11 in open-questions.md.
+
+_Updated 2026-11-09 by shubham shetmandrekar — related: index.html_
