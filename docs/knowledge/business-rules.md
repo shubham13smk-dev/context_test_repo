@@ -48,14 +48,15 @@ _Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
   picks a type at random with equal chance.
 - Enemies move **12% faster per level** above level 1, and this increase is **never capped**.
 - Enemies spawn more frequently as the level rises, down to a **floor of roughly one spawn every
-  0.3 seconds** on average.
+  0.3 seconds** on average on Normal. The difficulty multiplier is applied *after* the floor, so
+  the effective floor is about **0.39s on Easy and 0.225s on Hard**.
 - The shooting enemy fires faster as the level rises, down to a **floor of one shot every
   0.8 seconds**. It only fires once it is on screen.
 - On top of the level ramp, the chosen difficulty scales enemy pressure: enemy speed is
   **×0.8 on Easy, ×1 on Normal, ×1.25 on Hard**, and the time between spawns is **×1.3 / ×1 / ×0.75**.
   A change of difficulty mid-run takes effect immediately for these.
 
-_Updated 2026-11-07 by shubham shetmandrekar — related: index.html_
+_Updated 2026-11-09 by shubham shetmandrekar — related: index.html_
 
 ## Power-ups
 
