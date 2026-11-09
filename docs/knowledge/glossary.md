@@ -27,6 +27,7 @@ Put "_Updated YYYY-MM-DD by <name> — related: <paths>_" under each section you
   between players, devices or browsers.
 - **Scenery** — background visuals such as the starfield. Scenery is decorative only: it never
   collides with anything and never affects play.
-- **Map** — a background theme. Used in the knowledge base, but no maps exist in the game today.
+- **Map** — one of four selectable background themes (Deep Space, Nebula, Asteroid Field, Cyber
+  Grid). A map is scenery only; it never changes gameplay.
 
-_Drafted 2026-11-06 by knowledge-bootstrap — related: index.html, docs/knowledge/architecture.md_
+_Updated 2026-11-07 by shubham shetmandrekar — related: index.html, docs/knowledge/architecture.md_

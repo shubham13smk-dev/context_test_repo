@@ -17,8 +17,7 @@ first does not miss them; the linked file stays the source of truth.
 ## Recorded elsewhere
 
 - **Maps affect the background only, never gameplay** — the reason is in
-  [architecture.md](architecture.md) under "Maps / backgrounds". Note that no maps exist in the
-  game on the main branch today; see [open-questions.md](open-questions.md).
+  [architecture.md](architecture.md) under "Maps / backgrounds".
 - **Bright colours are reserved for things that can hit the player; scenery stays dim and grey** —
   the reason is in [conventions.md](conventions.md) under "Visual style".
 
