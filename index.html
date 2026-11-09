@@ -34,6 +34,13 @@
   button:hover { background: #7cf3ff; }
   button.secondary { background: transparent; color: #7cf3ff; border: 2px solid #2bd4ff; padding: 10px 30px; font-size: 16px; }
   button.secondary:hover { background: #2bd4ff22; }
+  #pauseBtn {
+    position: absolute; top: 40px; right: 10px; margin: 0; padding: 4px 10px;
+    font-size: 12px; letter-spacing: 1px; background: #141936cc; color: #7cf3ff;
+    border: 1px solid #2a3170; border-radius: 6px;
+  }
+  #pauseBtn:hover { background: #1d2450; }
+  #pauseBtn.hidden { display: none; }
   .panel {
     position: absolute; inset: 0; padding: 28px 24px;
     display: flex; flex-direction: column; align-items: stretch; justify-content: safe center; gap: 18px;
@@ -96,12 +103,13 @@
 <body>
 <div id="wrap">
   <canvas id="game" width="480" height="640"></canvas>
+  <button id="pauseBtn" class="hidden" aria-label="Pause" title="Pause (P / Esc)">❚❚</button>
   <div id="overlay">
     <h1 id="title">STAR BLASTER</h1>
     <p id="msg">
       Move: <b>← →</b> / <b>A D</b> (or drag on touch)<br>
       Shoot: <b>Space</b> (auto-fire on touch)<br>
-      Pause: <b>P</b>
+      Pause: <b>P</b> / <b>Esc</b> (or the <b>❚❚</b> button)
     </p>
     <button id="startBtn">Start Game</button>
     <div class="btn-row">
@@ -380,7 +388,7 @@ addEventListener('keydown', e => {
   }
   keys[e.code] = true;
   if (['Space', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.code)) e.preventDefault();
-  if (e.code === 'KeyP' && state === 'playing') togglePause();
+  if ((e.code === 'KeyP' || e.code === 'Escape') && (state === 'playing' || state === 'paused')) togglePause();
   if ((e.code === 'Enter' || e.code === 'Space') && state !== 'playing' && state !== 'paused') startGame();
 });
 addEventListener('keyup', e => { keys[e.code] = false; });
@@ -491,17 +499,23 @@ function startGame() {
   spawnTimer = 0; shootCooldown = 0; invuln = 2; levelTimer = 0;
   state = 'playing';
   overlay.classList.add('hidden');
+  pauseBtn.classList.remove('hidden');
   lastTime = performance.now();
   requestAnimationFrame(loop);
 }
 
+const pauseBtn = document.getElementById('pauseBtn');
+pauseBtn.addEventListener('click', togglePause);
+
 function togglePause() {
   if (state === 'playing') {
     state = 'paused';
-    showOverlay('PAUSED', 'Press <b>P</b> to resume', null);
+    pauseBtn.classList.add('hidden');
+    showOverlay('PAUSED', 'Press <b>P</b> or <b>Esc</b> to resume', 'Resume');
   } else if (state === 'paused') {
     state = 'playing';
     overlay.classList.add('hidden');
+    pauseBtn.classList.remove('hidden');
     lastTime = performance.now();
     requestAnimationFrame(loop);
   }
@@ -518,6 +532,7 @@ function showOverlay(title, html, btnText) {
 
 function gameOver() {
   state = 'over';
+  pauseBtn.classList.add('hidden');
   recordScore(score, level, settings.difficulty);
   if (score > highScore) {
     highScore = score;
@@ -532,7 +547,7 @@ function gameOver() {
     'Play Again');
 }
 
-startBtn.addEventListener('click', startGame);
+startBtn.addEventListener('click', () => state === 'paused' ? togglePause() : startGame());
 
 // ---------- Spawning ----------
 const ENEMY_TYPES = [
