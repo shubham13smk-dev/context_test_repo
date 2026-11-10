@@ -148,3 +148,17 @@ run had ended?
 
 Raised by: shubham shetmandrekar (2026-11-09)
 _related: index.html, docs/knowledge/business-rules.md_
+
+## 14. How does payment work? — for the PM / BA
+
+- How does payment work?
+- Raised by subs (PM / BA) on 2026-11-10.
+
+_Updated 2026-11-10 by subs via Knowledge Portal_
+
+## 15. Should we keep a store or marketplace system for power-ups and boosts? — for the PM / BA
+
+- Should we keep a store or marketplace system where the player can buy power-ups and boosts?
+- Raised by subs (PM / BA) on 2026-11-10.
+
+_Updated 2026-11-10 by subs via Knowledge Portal_
