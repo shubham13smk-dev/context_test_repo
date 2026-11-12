@@ -148,3 +148,12 @@ run had ended?
 
 Raised by: shubham shetmandrekar (2026-11-09)
 _related: index.html, docs/knowledge/business-rules.md_
+
+## 14. Do we have architecture setup for the shop feature? Is it in our scope? — for the PM / BA
+
+- Do we have architecture setup for the shop feature?
+- Is it in our scope?
+
+Raised by: subs (PM / BA) on 2026-11-12.
+
+_Updated 2026-11-12 by subs via Knowledge Portal_
