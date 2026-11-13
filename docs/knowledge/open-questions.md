@@ -22,15 +22,6 @@ should the cap be higher on Easy?
 Raised by: shubham shetmandrekar (2026-11-07)
 _related: index.html, docs/knowledge/business-rules.md_
 
-## 2. Who is this for, and what is it for?
-
-Nothing in the repository states the audience, the goal, or what success looks like. The design
-implies a casual pick-up-and-play game with no onboarding and no account, playable on desktop and
-touch. Is that right? Is this a product, a demo, a prototype or a learning exercise?
-
-Raised by: knowledge-bootstrap (2026-11-06)
-_related: docs/knowledge/overview.md_
-
 ## 3. Are the current balance numbers intended, or placeholders?
 
 Every value below is what the game does today. Please confirm each, or give the intended value.

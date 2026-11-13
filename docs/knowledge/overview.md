@@ -25,18 +25,15 @@ _Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
 
 ## Who it's for
 
-⚠ Needs PM/BA confirmation — the code says nothing about the intended audience. Best guess from the
-design: casual players on desktop or mobile looking for a short, pick-up-and-play game, with no
-onboarding and no account. See open-questions.md.
+Young mobile users who don't want to download heavy games and need a quick way to get entertainment without large downloads or installation.
 
-_Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
+_Updated 2026-11-13 by subs via Knowledge Portal — related: index.html, docs/knowledge/open-questions.md_
 
 ## The problem it solves / the goal
 
-⚠ Needs PM/BA confirmation — nothing in the code, docs or commit messages states why the project
-exists or what success looks like. See open-questions.md.
+Lets users play instantly by visiting the website — no download or installation required — solving the problem of heavy mobile games that take up storage and time to install.
 
-_Drafted 2026-11-06 by knowledge-bootstrap — related: (none)_
+_Updated 2026-11-13 by subs via Knowledge Portal — related: index.html, docs/knowledge/open-questions.md_
 
 ## Current status
 
