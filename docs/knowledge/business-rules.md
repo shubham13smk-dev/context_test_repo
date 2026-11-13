@@ -107,7 +107,7 @@ The Falcon keeps the original stats, so the default game plays exactly as before
 
 - A ship is **unlocked once the best score in that browser reaches its threshold**, and stays
   unlocked while that high score is kept. If the high score is cleared, a selected ship that is no
-  longer unlocked falls back to the Falcon.
+  longer unlocked falls back to the Falcon rather than being playable while locked.
 - The ship **cannot be changed during a run**. The Hangar opens only from the opening and game-over
   screens, not from pause. Why: swapping stats mid-run would let a player switch ships to suit the
   moment, e.g. to the Phantom just before taking a hit.
@@ -117,3 +117,5 @@ The Falcon keeps the original stats, so the default game plays exactly as before
   question 11 in open-questions.md.
 
 _Updated 2026-11-09 by shubham shetmandrekar — related: index.html_
+
+_Updated 2026-11-13 by subs via Knowledge Portal — related: docs/knowledge/open-questions.md_
