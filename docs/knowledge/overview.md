@@ -25,18 +25,18 @@ _Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
 
 ## Who it's for
 
-⚠ Needs PM/BA confirmation — the code says nothing about the intended audience. Best guess from the
-design: casual players on desktop or mobile looking for a short, pick-up-and-play game, with no
-onboarding and no account. See open-questions.md.
+Students at IIT Kanpur learning how to build a game. The game serves as an educational example
+of a complete, self-contained web-based arcade shooter.
 
-_Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
+_Updated 2026-11-18 by subs via Knowledge Portal — related: index.html_
 
 ## The problem it solves / the goal
 
-⚠ Needs PM/BA confirmation — nothing in the code, docs or commit messages states why the project
-exists or what success looks like. See open-questions.md.
+Provide a working, readable game codebase that IIT Kanpur students can study to learn how to
+build a browser-based game: game loop, input handling, entity management, collision detection,
+persistence, and UI panels — all in a single HTML file with no build step.
 
-_Drafted 2026-11-06 by knowledge-bootstrap — related: (none)_
+_Updated 2026-11-18 by subs via Knowledge Portal — related: (none)_
 
 ## Current status
 
