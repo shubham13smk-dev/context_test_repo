@@ -25,15 +25,15 @@ _Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
 
 ## Who it's for
 
-Young mobile users who don't want to download heavy games and need a quick way to get entertainment without large downloads or installation.
+- Young audience who don't want to download heavy games on mobile and need a quick way of entertainment without heavy downloads and installation.
 
-_Updated 2026-11-13 by subs via Knowledge Portal — related: index.html, docs/knowledge/open-questions.md_
+_Updated 2026-11-18 by subs via Knowledge Portal — related: index.html_
 
 ## The problem it solves / the goal
 
-Lets users play instantly by visiting the website — no download or installation required — solving the problem of heavy mobile games that take up storage and time to install.
+- Solves the problem of downloading heavy games on mobile by letting users play simply by visiting the website without needing to download or install.
 
-_Updated 2026-11-13 by subs via Knowledge Portal — related: index.html, docs/knowledge/open-questions.md_
+_Updated 2026-11-18 by subs via Knowledge Portal — related: (none)_
 
 ## Current status
 
