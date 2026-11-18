@@ -25,16 +25,13 @@ _Drafted 2026-11-06 by knowledge-bootstrap — related: index.html_
 
 ## Who it's for
 
-Students at IIT Kanpur learning how to build a game. The game serves as an educational example
-of a complete, self-contained web-based arcade shooter.
+- Young audience who don't want to download heavy games on mobile and need a quick way of entertainment without heavy downloads and installation.
 
 _Updated 2026-11-18 by subs via Knowledge Portal — related: index.html_
 
 ## The problem it solves / the goal
 
-Provide a working, readable game codebase that IIT Kanpur students can study to learn how to
-build a browser-based game: game loop, input handling, entity management, collision detection,
-persistence, and UI panels — all in a single HTML file with no build step.
+- Solves the problem of downloading heavy games on mobile by letting users play simply by visiting the website without needing to download or install.
 
 _Updated 2026-11-18 by subs via Knowledge Portal — related: (none)_
 
