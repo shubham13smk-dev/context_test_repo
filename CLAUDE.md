@@ -8,4 +8,4 @@ Before working in an area, read `docs/knowledge/INDEX.md` and the topic files re
   and are the source of truth for how the product should behave. If the code disagrees with them, point it out to the user
   instead of silently picking one.
 - If the work depends on an unanswered product question, check `open-questions.md` and say so.
-At the end of meaningful work, suggest running `/team-knowledge:share-context` to save anything the team should know.
+At the end of meaningful work, suggest running `/haikei:share-context` to save anything the team should know.
