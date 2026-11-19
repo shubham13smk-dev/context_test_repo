@@ -5,7 +5,7 @@ and the things the code and git history don't tell you.
 
 - Business topics are owned by the PM / BA and are the source of truth for product rules.
 - Technical topics are owned by developers.
-- Updated through `/team-knowledge:share-context` (or the Knowledge Portal) and reviewed in PRs. Keep each topic current; it is not a changelog.
+- Updated through `/haikei:share-context` (or the MINATO portal) and reviewed in PRs. Keep each topic current; it is not a changelog.
 - Claude reads this file first, then opens only the topics it needs.
 
 ## Business (owned by PM / BA)
