@@ -33,7 +33,7 @@ _Updated 2026-11-09 by shubham shetmandrekar — related: index.html_
 
 ## Scoring
 
-- Destroying an enemy scores **10** (weak), **25** (weaving) or **50** (shooting) points.
+- Destroying an enemy scores **20** (weak), **25** (weaving) or **50** (shooting) points. ⏳ Decided 2026-11-20, not built yet
 - An enemy that escapes off the bottom of the screen costs the player **5 points**.
 - The score can never go **below zero** — a penalty at zero points costs nothing.
 - The **top 5 scores** reached in that browser are kept, best first, each with the level reached
@@ -46,7 +46,7 @@ _Updated 2026-11-09 by shubham shetmandrekar — related: index.html_
 - All difficulties share **one list**, so Easy and Hard scores are ranked together. ⚠ See question
   12 in open-questions.md.
 
-_Updated 2026-11-09 by shubham shetmandrekar — related: index.html_
+_Updated 2026-11-20 by subs via Knowledge Portal — related: index.html_
 
 ## Levels and difficulty
 
